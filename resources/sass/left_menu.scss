@@ -1,0 +1,16 @@
+.left-menu{
+    display: flex;
+    flex-direction: column;
+    background: #343A40;
+    height: 100vh;
+}
+
+.router-link{
+    padding: 1em;
+    text-decoration: none;
+    transition: background-color 0.8s;
+}
+.router-link:hover{
+    background-color: white;
+    text-decoration: none;
+}
