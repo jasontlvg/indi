@@ -28,6 +28,7 @@ Vue.use(VueProgressBar, {
     height: '2px'
 })
 
+window.Fire= new Vue();
 
 /**
  * The following block of code may be used to automatically register your
@@ -43,7 +44,8 @@ Vue.use(VueProgressBar, {
 const routes = [
     { path: '/fakeusers', component: require('./components/Starforce.vue').default},
     { path: '/cygnus', component: require('./components/Cygnus.vue').default },
-    { path: '/usersapi', component: require('./components/usersAPI.vue').default }
+    { path: '/usersapi', component: require('./components/usersAPI.vue').default },
+    { path: '/profile', component: require('./components/profile.vue').default },
 ]
 
 const router= new VueRouter({

@@ -21,17 +21,13 @@ use App\fakeUser;
 //});
 
 Route::middleware('auth:api')->get('/user/prime', function (Request $request) {
-//     return fakeUser::all();
-//    $fakeUser= new fakeUser();
-
-     return App\User::paginate(5);
-//     return App\User::all();
+     return App\User::orderBy('id', 'desc')->paginate(5);
 });
 
 Route::middleware('auth:api')->post('/user/cygnus', function (Request $request) {
-//    return $request->all();
     return Auth::id();
 });
 
-//Route::apiResources(['user' => 'API\UserController']);
+Route::get('user/profile', 'API\UserController@profile');
+Route::put('user/updateprofile', 'API\UserController@updateProfile');
 Route::apiResource('user', 'API\UserController');

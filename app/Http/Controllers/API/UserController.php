@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Intervention\Image\ImageManagerStatic as Image;
 
-//use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -42,16 +42,24 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'bio' => 'required',
         ]);
-        $date = Carbon::now();
+        $request->merge(['password' => Hash::make($request->password)]);
 
-        $user= new User();
-        $user->name= $request->name;
-        $user->email= $request->email;
-        $user->bio= $request->bio;
-        $user->type= $request->type;
-        $user->password= Hash::make($request->password);
-        $user->save();
-        return $user;
+        $user= new User($request->all());
+        if ($user->save()){
+            return ['message' => 'El usuario se a agregado'];
+        }else{
+            return ['message' => 'Error'];
+        }
+//        $date = Carbon::now();
+//
+//        $user= new User();
+//        $user->name= $request->name;
+//        $user->email= $request->email;
+//        $user->bio= $request->bio;
+//        $user->type= $request->type;
+//        $user->password= Hash::make($request->password);
+//        $user->save();
+//        return $user;
     }
 
     /**
@@ -74,7 +82,21 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user= User::findOrFail($id);
+        $this->validate($request, [
+            'name' => 'required',
+            'password' => 'required',
+            'type' => 'required',
+            'email' => 'required|string|email|unique:users,email,'.$user->id,
+            'bio' => 'required'
+        ]);
+        $user->name= $request->name;
+        $user->email= $request->email;
+        $user->type= $request->type;
+        $user->bio= $request->bio;
+        $user->password= Hash::make($request->password);
+        $user->save();
+        return $user;
     }
 
     /**
@@ -85,6 +107,26 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return ['message' => 'Exitosamente Eliminado'];
+    }
+
+    public function profile()
+    {
+        $user= auth('api')->user();
+        return $user;
+    }
+
+    public function updateProfile(Request $request)
+    {
+
+        $user= auth('api')->user();
+
+//        Image::configure(array('driver' => 'imagick'));
+        Image::make($request->photo)->save(public_path('img/jason.png'));
+
+
+        return $request->photo;
     }
 }

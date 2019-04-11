@@ -19,6 +19,8 @@ $factory->define(App\User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
+        'bio' => $faker->realText($maxNbChars = 30, $indexSize = 2),
+        'type' => $faker->randomElement($array = array ('Admin','Standar User','Author')),
         'password' => '$2y$10$XRTIpntDJqJwS7Qzc048.OGHwslY0vCu74KrO2m4tUSQfU/2sELFW', // secret
         'email_verified_at' => now(),
         'remember_token' => str_random(10),

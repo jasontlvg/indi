@@ -25,8 +25,9 @@
         <div class="row">
             <div class="col-sm-2 left-menu p-0">
                     <router-link to="/usersapi" class="router-link">Users</router-link>
-                    <router-link to="/fakeusers" class="router-link">fakeUsers</router-link>
-                    <router-link to="/cygnus" class="router-link">Cygnus</router-link>
+                    <router-link to="/profile" class="router-link">Profile</router-link>
+{{--                    <router-link to="/fakeusers" class="router-link">fakeUsers</router-link>--}}
+{{--                    <router-link to="/cygnus" class="router-link">Cygnus</router-link>--}}
             </div>
             <div class="col-sm-10">
                 <div class="row">

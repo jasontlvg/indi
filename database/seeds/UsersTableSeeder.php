@@ -11,12 +11,14 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        for($i=0; $i<=100; $i++){
+        for($i=0; $i<=95; $i++){
             $usersFactory= factory(\App\User::class)->make();
             $user= new \App\User();
             $user->name=$usersFactory->name;
             $user->email=$usersFactory->email;
             $user->password=$usersFactory->password;
+            $user->bio=$usersFactory->bio;
+            $user->type=$usersFactory->type;
             $user->save();
         }
     }
