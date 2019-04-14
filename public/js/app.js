@@ -2004,7 +2004,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
     // console.log('Component mounted.')
@@ -2028,8 +2027,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    prueba: function prueba() {},
     getPhoto: function getPhoto() {
-      return 'img/jason.png';
+      var photo = this.form.photo.length > 200 ? this.form.photo : "img/profile/" + this.form.photo;
+      return photo; // return 'img/' + this.form.photo;
     },
     loadUsers: function loadUsers() {
       var x = this;
@@ -2047,6 +2048,7 @@ __webpack_require__.r(__webpack_exports__);
 
       // console.log(e.target.files[0]);
       var file = e.target.files[0];
+      console.log(file.size);
       var reader = new FileReader();
 
       reader.onloadend = function () {
@@ -2054,9 +2056,13 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.photo = reader.result;
       };
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // Nuevo
     },
     sendData: function sendData() {
+      if (this.form.password === "") {
+        this.form.password = undefined;
+      }
+
       this.form.put('api/user/updateprofile').then(function (_ref) {
         var data = _ref.data;
         console.log(data);

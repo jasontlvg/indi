@@ -48,8 +48,7 @@
             </form>
         </div>
         <img :src="getPhoto()" alt="">
-<!--        <img :src="img/jason.png" alt="">-->
-<!--        <button type="button" @click="loadUsers"></button>-->
+<!--        <p>{{prueba()}}</p>-->
     </div>
     
 </template>
@@ -78,8 +77,13 @@
             }
         },
         methods:{
+            prueba: function () {
+
+            },
             getPhoto: function () {
-                return 'img/jason.png';
+                let photo= (this.form.photo.length > 200) ? this.form.photo : "img/profile/" + this.form.photo;
+                return photo;
+                // return 'img/' + this.form.photo;
             },
             loadUsers: function () {
                 let x= this;
@@ -97,14 +101,22 @@
             imageProfile: function(e){
                 // console.log(e.target.files[0]);
                 let file= e.target.files[0];
+                console.log(file.size);
                 let reader= new FileReader();
                 reader.onloadend= () => {
                     console.log(reader.result);
                     this.form.photo= reader.result
                 }
                 reader.readAsDataURL(file);
+
+                // Nuevo
             },
             sendData: function () {
+
+                if(this.form.password === ""){
+                    this.form.password= undefined;
+                }
+
                 this.form.put('api/user/updateprofile')
                     .then(({ data }) => { console.log(data) })
             }

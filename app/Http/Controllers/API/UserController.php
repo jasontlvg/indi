@@ -122,11 +122,80 @@ class UserController extends Controller
     {
 
         $user= auth('api')->user();
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users,email,'.$user->id,
+            'password' => 'required|sometimes|max:255',
+            'type' => 'required',
+            'bio' => 'required|sometimes',
+            'photo' => 'required|sometimes'
+        ]);
 
-//        Image::configure(array('driver' => 'imagick'));
-        Image::make($request->photo)->save(public_path('img/jason.png'));
+        return public_path();
+        // Codigo Code Inspire
+        $currentPhoto = $user->photo; // Por default, nosotros dijimos que
+        if($request->photo != $currentPhoto){
+
+            $imageName = preg_match_all('/data\:image\/([a-zA-Z]+)\;base64/',$request->photo,$matched); $ext = isset($matched[1][0]) ? $matched[1][0] : false; $imageName = sha1(time()) . '.' .$ext;
+            Image::make($request->photo)->save( public_path('img/profile/' . $imageName) );
+
+            $request->merge(['photo' => $imageName]); // Esto es Igual a decir $request->photo = $imageName;
+
+            $userPhoto = public_path('img/profile/').$currentPhoto;
+
+            if(file_exists($userPhoto)){
+                @unlink($userPhoto);
+            }
+        }
+
+        if(!empty($request->password)){
+            $request->merge(['password' => Hash::make($request['password'])]);
+        }
+
+        $user->update($request->all());
+
+        return ['message' => "Success"];
 
 
-        return $request->photo;
+
+
+        // Codigo Jason
+
+//        // Detectar si hay foto o no
+//        if($request->photo == $user->photo){
+////            return 'Foto repetida';
+//        }else{
+//            $imageName = preg_match_all('/data\:image\/([a-zA-Z]+)\;base64/',$request->photo,$matched); $ext = isset($matched[1][0]) ? $matched[1][0] : false; $imageName = sha1(time()) . '.' .$ext;
+//            Image::make($request->photo)->save( public_path('img/' . $imageName) );
+//
+//            $userPhoto= public_path('img/').$user->photo;
+//
+//            if (file_exists($userPhoto)){
+//                @unlink($userPhoto);
+//            }
+//            // Guardar en DB
+//            $user->photo= $imageName;
+//            $user->save();
+//        }
+//
+//        // Contraseña
+//        if($request->password){
+//            $user->password= Hash::make($request->password);
+//            $user->save();
+//        }else{
+////            return 'Sin contraseña';
+//        }
+//
+//
+//
+//
+//        $user->name= $request->name;
+//        $user->email= $request->email;
+//        $user->type= $request->type;
+//        $user->bio= $request->bio;
+//        $user->save();
+//
+//        return 'Salvado';
+
     }
 }
