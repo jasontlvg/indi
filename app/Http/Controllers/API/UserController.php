@@ -82,10 +82,14 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+//        $this->authorize('isUser');
+
+
         $user= User::findOrFail($id);
         $this->validate($request, [
             'name' => 'required',
-            'password' => 'required',
+            'password' => 'required|sometimes',
             'type' => 'required',
             'email' => 'required|string|email|unique:users,email,'.$user->id,
             'bio' => 'required'
@@ -94,7 +98,9 @@ class UserController extends Controller
         $user->email= $request->email;
         $user->type= $request->type;
         $user->bio= $request->bio;
-        $user->password= Hash::make($request->password);
+        if($request->password){
+            $user->password= Hash::make($request->password);
+        }
         $user->save();
         return $user;
     }
@@ -131,7 +137,6 @@ class UserController extends Controller
             'photo' => 'required|sometimes'
         ]);
 
-        return public_path();
         // Codigo Code Inspire
         $currentPhoto = $user->photo; // Por default, nosotros dijimos que
         if($request->photo != $currentPhoto){

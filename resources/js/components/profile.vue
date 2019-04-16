@@ -27,9 +27,9 @@
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">Select User Role</label>
                     <select v-model="form.type"  class="form-control" id="exampleFormControlSelect1" :class="{ 'is-invalid': form.errors.has('type') }">
-                        <option>Admin</option>
-                        <option>Standar User</option>
-                        <option>Author</option>
+                        <option>admin</option>
+                        <option>user</option>
+                        <option>author</option>
                     </select>
                     <has-error :form="form" field="type"></has-error>
                 </div>
@@ -48,7 +48,7 @@
             </form>
         </div>
         <img :src="getPhoto()" alt="">
-<!--        <p>{{prueba()}}</p>-->
+        <button type="button" @click="prueba">Prueba</button>
     </div>
     
 </template>
@@ -56,8 +56,10 @@
 <script>
     export default {
         created() {
-            // console.log('Component mounted.')
             this.loadUsers();
+            Fire.$on('AfterCreated', () => {
+                console.log('Exito')
+            })
         },
         name: "profile",
         data: function () {
@@ -77,15 +79,14 @@
             }
         },
         methods:{
-            prueba: function () {
 
-            },
             getPhoto: function () {
                 let photo= (this.form.photo.length > 200) ? this.form.photo : "img/profile/" + this.form.photo;
                 return photo;
                 // return 'img/' + this.form.photo;
             },
             loadUsers: function () {
+                console.log('Exito')
                 let x= this;
                 axios.get('./api/user/profile')
                     .then(function (response) {
@@ -97,6 +98,7 @@
                         // handle error
                         console.log(error);
                     })
+
             },
             imageProfile: function(e){
                 // console.log(e.target.files[0]);
@@ -119,7 +121,10 @@
 
                 this.form.put('api/user/updateprofile')
                     .then(({ data }) => { console.log(data) })
-            }
+            },
+            prueba: function () {
+                Fire.$emit('AfterCreated');
+            },
         }
     }
 </script>

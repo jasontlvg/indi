@@ -36,9 +36,9 @@
                             <div class="form-group">
                                 <label for="exampleFormControlSelect1">Select User Role</label>
                                 <select v-model="form.type"  class="form-control" id="exampleFormControlSelect1" :class="{ 'is-invalid': form.errors.has('type') }">
-                                    <option>Admin</option>
-                                    <option>Standar User</option>
-                                    <option>Author</option>
+                                    <option>admin</option>
+                                    <option>user</option>
+                                    <option>author</option>
                                 </select>
                                 <has-error :form="form" field="type"></has-error>
                             </div>
@@ -88,7 +88,13 @@
         <button type="button" class="btn btn-primary" @click="paginacion">
             Siguiente
         </button>
+
+        <h4 v-show="$gate.isAdmin()">Hola Mundo</h4>
+        <ninja></ninja>
+        <button type="button" @click="prueba" >Emitir</button>
     </div>
+
+
 </template>
 
 <script>
@@ -96,6 +102,8 @@
         created() {
             // console.log('Component mounted.')
             this.loadUsers();
+            // console.log('prime')
+            console.log(this.$gate.isAdmin())
         },
         props:{
             token: String
@@ -226,7 +234,7 @@
                 //     .catch( (error) => { console.log(error) } )
             },
             updateUserSubmit: function (user) {
-                console.log('Shield');
+                // console.log('Shield');
                 this.form.put('api/user/'+this.idForUpdate)
                     .then( (data) => { console.log(data)
                         $('#exampleModal').modal('hide')
@@ -239,7 +247,16 @@
                     })
                     .catch( (error) => {
                         console.log('Error');
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                            footer: '<a href>Why do I have this issue?</a>'
+                        })
                     })
+            },
+            prueba: function () {
+                Fire.$emit('AfterCreated')
             }
         }
     }

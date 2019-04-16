@@ -30,6 +30,9 @@ Vue.use(VueProgressBar, {
 
 window.Fire= new Vue();
 
+import Gate from './Gate';
+Vue.prototype.$gate= new Gate(window.user);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -37,6 +40,12 @@ window.Fire= new Vue();
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
+
+// Components for SPA
+// Vue.component('starforce', require('./components/Starforce.vue').default);
+// Vue.component('cygnus', require('./components/Cygnus.vue').default);
+// Vue.component('shield', require('./components/Shield.vue').default);
+Vue.component('ninja', require('./components/NotFound.vue').default);
 
 
 // Router Components
@@ -53,11 +62,7 @@ const router= new VueRouter({
     routes
 });
 
-// Components for SPA
-// Vue.component('starforce', require('./components/Starforce.vue').default);
-// Vue.component('cygnus', require('./components/Cygnus.vue').default);
-// Vue.component('shield', require('./components/Shield.vue').default);
-// Vue.component('pagination', require('laravel-vue-pagination'));
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -67,5 +72,11 @@ const router= new VueRouter({
 
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    methods: {
+        emisor: function () {
+            // Fire.$emit('AfterCreated')
+            Fire.$emit('AfterCreated')
+        }
+    }
 });

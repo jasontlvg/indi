@@ -9,8 +9,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -26,7 +25,9 @@
             <div class="col-sm-2 left-menu p-0">
                     <router-link to="/usersapi" class="router-link">Users</router-link>
                     <router-link to="/profile" class="router-link">Profile</router-link>
-{{--                    <router-link to="/fakeusers" class="router-link">fakeUsers</router-link>--}}
+                    @can('isAdmin')
+                        <router-link to="/fakeusers" class="router-link">fakeUsers</router-link>
+                    @endcan
 {{--                    <router-link to="/cygnus" class="router-link">Cygnus</router-link>--}}
             </div>
             <div class="col-sm-10">
@@ -39,6 +40,8 @@
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
+
+                            <button type="button" @click="emisor">Enviar</button>
 
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <!-- Left Side Of Navbar -->
@@ -96,5 +99,16 @@
             </div>
         </div>
     </div>
+
+{{--    <h2> {{auth()->user()}} </h2>--}}
+
+    <!-- Scripts -->
+
+    <script>
+        window.user= @json( auth()->user() );
+    </script>
+
+    <script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 </html>
